@@ -44,6 +44,25 @@ class Post(db.Model):
     title = db.Column(db.String(75), nullable=False)
     text = db.Column(db.Text)
     published = db.Column(db.DateTime, nullable=False)
+    comments = db.relationship("Comment", back_populates="post")
 
     def __str__(self):
         return self.title
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey("post.id", name="post"))
+    post = db.relationship("Post", back_populates="comments")
+    text = db.Column(db.Text())
+    # name = db.CharField(max_length=80)
+    # email = db.EmailField()
+    # body = db.TextField()
+    # created = db.DateTimeField(auto_now_add=True)
+    # updated = db.DateTimeField(auto_now=True)
+    # active = db.BooleanField(default=True)
+
+    # class Meta:
+    #     ordering = ('created',)
+
+    def __str__(self):
+        return 'Comment by {} on {}'.format(self.name, self.post)
